@@ -45,6 +45,18 @@ int put(HashMap map, char *key, char *value) {
     return index;
 }
 
+int delete(HashMap map, char * key) {
+    int index = hash(key);
+    if (map.entry[index].key != NULL) {
+        free(map.entry[index].key);
+        free(map.entry[index].value);
+        map.entry[index].key = NULL;
+        map.entry[index].value = NULL;
+        return 1;
+    }
+    return 0;
+}
+
 /**
  * Gets the value of a key for a hashmap.
  */
@@ -135,7 +147,16 @@ int main() {
                 break;
             }
             break;
-        } else {
+        } else if (strcmp(operation, "delete") == 0) {
+            char *key = strtok(NULL, " \t\n");
+            if (delete(map, key)) {
+                printf("cachedb: Key successfully deleted.\n");
+            }
+            else {
+                printf("cachedb: Key not found.\n");
+            }
+        }
+        else {
             printf("cachedb: Invalid command.\n");
         }
     }
